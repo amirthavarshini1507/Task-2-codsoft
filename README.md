@@ -104,6 +104,7 @@ Last Moves Undone Successfully!
 
 ---
 🔮 Future Enhancements
+
 Multiple Difficulty Levels
 Scoreboard System
 Tournament Mode
@@ -114,9 +115,3 @@ ___
 👩‍💻 Developed By
 
 Amirthavarshini
-
----
-
-📜 License
-
-This project is developed for educational, learning, and portfolio purposes.
