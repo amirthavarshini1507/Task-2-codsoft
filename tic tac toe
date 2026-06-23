@@ -1,0 +1,192 @@
+# ==========================================
+# TIC-TAC-TOE AI USING MINIMAX ALGORITHM
+# Developed by: Amirtha
+# ==========================================
+
+import math
+
+HUMAN = "X"
+AI = "O"
+
+# Display Board
+def print_board(board):
+    print("\n")
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 9)
+    print("\n")
+
+
+# Check Winner
+def check_winner(board, player):
+
+    # Rows
+    for row in board:
+        if all(cell == player for cell in row):
+            return True
+
+    # Columns
+    for col in range(3):
+        if all(board[row][col] == player for row in range(3)):
+            return True
+
+    # Diagonals
+    if all(board[i][i] == player for i in range(3)):
+        return True
+
+    if all(board[i][2 - i] == player for i in range(3)):
+        return True
+
+    return False
+
+
+# Check Draw
+def is_draw(board):
+    for row in board:
+        if " " in row:
+            return False
+    return True
+
+
+# Minimax Algorithm
+def minimax(board, depth, is_maximizing):
+
+    if check_winner(board, AI):
+        return 10 - depth
+
+    if check_winner(board, HUMAN):
+        return depth - 10
+
+    if is_draw(board):
+        return 0
+
+    if is_maximizing:
+
+        best_score = -math.inf
+
+        for row in range(3):
+            for col in range(3):
+
+                if board[row][col] == " ":
+                    board[row][col] = AI
+
+                    score = minimax(board, depth + 1, False)
+
+                    board[row][col] = " "
+
+                    best_score = max(score, best_score)
+
+        return best_score
+
+    else:
+
+        best_score = math.inf
+
+        for row in range(3):
+            for col in range(3):
+
+                if board[row][col] == " ":
+                    board[row][col] = HUMAN
+
+                    score = minimax(board, depth + 1, True)
+
+                    board[row][col] = " "
+
+                    best_score = min(score, best_score)
+
+        return best_score
+
+
+# AI Move
+def ai_move(board):
+
+    best_score = -math.inf
+    move = None
+
+    for row in range(3):
+        for col in range(3):
+
+            if board[row][col] == " ":
+
+                board[row][col] = AI
+
+                score = minimax(board, 0, False)
+
+                board[row][col] = " "
+
+                if score > best_score:
+                    best_score = score
+                    move = (row, col)
+
+    board[move[0]][move[1]] = AI
+
+
+# Human Move
+def human_move(board):
+
+    while True:
+
+        try:
+            row = int(input("Enter Row (0-2): "))
+            col = int(input("Enter Column (0-2): "))
+
+            if board[row][col] == " ":
+                board[row][col] = HUMAN
+                break
+
+            else:
+                print("Cell already occupied!")
+
+        except:
+            print("Invalid Input! Try Again.")
+
+
+# Main Game
+def play_game():
+
+    board = [
+        [" ", " ", " "],
+        [" ", " ", " "],
+        [" ", " ", " "]
+    ]
+
+    print("=" * 40)
+    print("      TIC-TAC-TOE AI GAME")
+    print("=" * 40)
+    print("You are X")
+    print("AI is O")
+
+    while True:
+
+        print_board(board)
+
+        human_move(board)
+
+        if check_winner(board, HUMAN):
+            print_board(board)
+            print("🎉 Congratulations! You Win!")
+            break
+
+        if is_draw(board):
+            print_board(board)
+            print("🤝 Match Draw!")
+            break
+
+        print("AI is thinking...\n")
+
+        ai_move(board)
+
+        if check_winner(board, AI):
+            print_board(board)
+            print("🤖 AI Wins!")
+            break
+
+        if is_draw(board):
+            print_board(board)
+            print("🤝 Match Draw!")
+            break
+
+
+# Run Program
+if __name__ == "__main__":
+    play_game()
